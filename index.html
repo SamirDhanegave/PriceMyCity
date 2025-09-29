@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost of Living Calculator - Compare Living Costs Worldwide</title>
+    <meta name="description" content="Compare rent, groceries, utilities, and living costs across cities worldwide with this free tool. Perfect for students, remote workers, expats, and anyone planning to move.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1f2937;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            animation: fadeInUp 0.6s ease 0.2s backwards;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subheadline {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            font-weight: 400;
+            opacity: 0.95;
+            animation: fadeInUp 0.6s ease 0.4s backwards;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease 0.6s backwards;
+        }
+
+        .search-wrapper {
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            transition: transform 0.3s ease;
+        }
+
+        .search-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        select {
+            flex: 1;
+            min-width: 250px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            background: #f9fafb;
+            color: #374151;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        select:hover {
+            background: white;
+            border-color: #2563eb;
+        }
+
+        select:focus {
+            outline: none;
+            background: white;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            padding: 16px 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            padding: 30px 20px;
+            margin: 40px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .stats-bar.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Results Section */
+        .results {
+            padding: 40px 20px 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+            pointer-events: none;
+        }
+
+        .results.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .results-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .results-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border-color: #2563eb;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .card:hover .card-icon {
+            animation: spin 0.6s ease;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+            to {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .card-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .card-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-value {
+            transform: scale(1.1);
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        /* Compare Section */
+        .compare-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            padding: 16px 40px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255,255,255,0.4);
+        }
+
+        /* Random City Button */
+        .random-city-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-left: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(245, 87, 108, 0.6);
+            }
+        }
+
+        /* Comparison Tool */
+        .comparison-tool {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .comparison-tool.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .comparison-header h3 {
+            font-size: 1.75rem;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .comparison-item {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-item:hover {
+            background: #eff6ff;
+            transform: scale(1.05);
+        }
+
+        .comparison-emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .comparison-title {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .comparison-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: white;
+            padding: 60px 20px;
+            margin-top: 60px;
+            border-radius: 30px 30px 0 0;
+        }
+
+        .info-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .info-content h3 {
+            font-size: 2rem;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .info-content p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Footer */
+        footer {
+            background: #111827;
+            color: #9ca3af;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spinner 0.8s linear infinite;
+        }
+
+        @keyframes spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .subheadline {
+                font-size: 1.1rem;
+            }
+
+            .search-wrapper {
+                flex-direction: column;
+            }
+
+            select {
+                min-width: 100%;
+            }
+
+            .random-city-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-value {
+                font-size: 2rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero {
+                padding: 40px 20px 30px;
+            }
+
+            .comparison-tool {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">🌍 50+ Cities Worldwide</div>
+            <h1>How Much Does It Cost to Live Anywhere in the World?</h1>
+            <p class="subheadline">Compare rent, groceries, utilities, and more across global cities instantly.</p>
+            
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <select id="citySelect">
+                        <option value="">Select a City Worldwide...</option>
+                        <optgroup label="🇺🇸 United States">
+                            <option value="new-york">New York, NY</option>
+                            <option value="los-angeles">Los Angeles, CA</option>
+                            <option value="chicago">Chicago, IL</option>
+                            <option value="austin">Austin, TX</option>
+                            <option value="miami">Miami, FL</option>
+                            <option value="seattle">Seattle, WA</option>
+                            <option value="boston">Boston, MA</option>
+                            <option value="denver">Denver, CO</option>
+                            <option value="atlanta">Atlanta, GA</option>
+                            <option value="portland">Portland, OR</option>
+                        </optgroup>
+                        <optgroup label="🇬🇧 United Kingdom">
+                            <option value="london">London</option>
+                            <option value="manchester">Manchester</option>
+                            <option value="edinburgh">Edinburgh</option>
+                        </optgroup>
+                        <optgroup label="🇨🇦 Canada">
+                            <option value="toronto">Toronto</option>
+                            <option value="vancouver">Vancouver</option>
+                            <option value="montreal">Montreal</option>
+                        </optgroup>
+                        <optgroup label="🇦🇺 Australia">
+                            <option value="sydney">Sydney</option>
+                            <option value="melbourne">Melbourne</option>
+                            <option value="brisbane">Brisbane</option>
+                        </optgroup>
+                        <optgroup label="🇩🇪 Germany">
+                            <option value="berlin">Berlin</option>
+                            <option value="munich">Munich</option>
+                            <option value="frankfurt">Frankfurt</option>
+                        </optgroup>
+                        <optgroup label="🇫🇷 France">
+                            <option value="paris">Paris</option>
+                            <option value="lyon">Lyon</option>
+                            <option value="marseille">Marseille</option>
+                        </optgroup>
+                        <optgroup label="🇪🇸 Spain">
+                            <option value="madrid">Madrid</option>
+                            <option value="barcelona">Barcelona</option>
+                            <option value="valencia">Valencia</option>
+                        </optgroup>
+                        <optgroup label="🇮🇹 Italy">
+                            <option value="rome">Rome</option>
+                            <option value="milan">Milan</option>
+                            <option value="florence">Florence</option>
+                        </optgroup>
+                        <optgroup label="🇳🇱 Netherlands">
+                            <option value="amsterdam">Amsterdam</option>
+                            <option value="rotterdam">Rotterdam</option>
+                        </optgroup>
+                        <optgroup label="🇨🇭 Switzerland">
+                            <option value="zurich">Zurich</option>
+                            <option value="geneva">Geneva</option>
+                        </optgroup>
+                        <optgroup label="🇸🇬 Singapore">
+                            <option value="singapore">Singapore</option>
+                        </optgroup>
+                        <optgroup label="🇯🇵 Japan">
+                            <option value="tokyo">Tokyo</option>
+                            <option value="osaka">Osaka</option>
+                            <option value="kyoto">Kyoto</option>
+                        </optgroup>
+                        <optgroup label="🇰🇷 South Korea">
+                            <option value="seoul">Seoul</option>
+                            <option value="busan">Busan</option>
+                        </optgroup>
+                        <optgroup label="🇦🇪 UAE">
+                            <option value="dubai">Dubai</option>
+                            <option value="abu-dhabi">Abu Dhabi</option>
+                        </optgroup>
+                        <optgroup label="🇮🇳 India">
+                            <option value="mumbai">Mumbai</option>
+                            <option value="bangalore">Bangalore</option>
+                            <option value="delhi">New Delhi</option>
+                        </optgroup>
+                        <optgroup label="🇧🇷 Brazil">
+                            <option value="sao-paulo">São Paulo</option>
+                            <option value="rio">Rio de Janeiro</option>
+                        </optgroup>
+                        <optgroup label="🇲🇽 Mexico">
+                            <option value="mexico-city">Mexico City</option>
+                            <option value="guadalajara">Guadalajara</option>
+                        </optgroup>
+                        <optgroup label="🇿🇦 South Africa">
+                            <option value="cape-town">Cape Town</option>
+                            <option value="johannesburg">Johannesburg</option>
+                        </optgroup>
+                    </select>
+                    <button class="btn" onclick="calculateCost()"><span>Calculate Cost</span></button>
+                    <button class="btn random-city-btn" onclick="selectRandomCity()"><span>🎲 Surprise Me!</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="container">
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Global Cities</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">18</span>
+                <span class="stat-label">Countries</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">5</span>
+                <span class="stat-label">Cost Categories</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Free Forever</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <section class="results" id="resultsSection">
+        <div class="container">
+            <div class="results-header">
+                <h2 id="cityName">City Name</h2>
+                <p>Average monthly costs for one person</p>
+            </div>
+
+            <div class="cards-grid" id="cardsGrid">
+                <div class="card">
+                    <span class="card-icon">🏠</span>
+                    <div class="card-label">Monthly Rent</div>
+                    <div class="card-value" id="rent">$0</div>
+                    <div class="card-description">Average 1-bedroom apartment in city center</div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🥦</span>
+                    <div class="card-label">Groceries</div>
+                    <div class="card-value" id="groceries">$0</div>
+                    <div class="card-description">Monthly grocery cost for one person</div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">💡</span>
+                    <div class="card-label">Utilities</div>
+                    <div class="card-value" id="utilities">$0</div>
+                    <div class="card-description">Electricity, water, heating, and internet</div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">⛽️</span>
+                    <div class="card-label">Gas Price</div>
+                    <div class="card-value" id="gas">$0</div>
+                    <div class="card-description">Average price per gallon/liter</div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">💰</span>
+                    <div class="card-label">Suggested Salary</div>
+                    <div class="card-value" id="salary">$0</div>
+                    <div class="card-description">Monthly income for comfortable living</div>
+                </div>
+            </div>
+
+            <!-- Comparison Tool -->
+            <div class="comparison-tool" id="comparisonTool">
+                <div class="comparison-header">
+                    <h3>💡 Quick Insights</h3>
+                    <p style="color: #6b7280;">Here's what you can afford with your budget</p>
+                </div>
+                <div class="comparison-grid" id="comparisonGrid">
+                    <div class="comparison-item">
+                        <div class="comparison-emoji">☕</div>
+                        <div class="comparison-title">Coffee Budget</div>
+                        <div class="comparison-value" id="coffeeCount">-</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-emoji">🍕</div>
+                        <div class="comparison-title">Pizza Nights</div>
+                        <div class="comparison-value" id="pizzaCount">-</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-emoji">🎬</div>
+                        <div class="comparison-title">Movie Tickets</div>
+                        <div class="comparison-value" id="movieCount">-</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-emoji">🏋️</div>
+                        <div class="comparison-title">Gym Memberships</div>
+                        <div class="comparison-value" id="gymCount">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compare-section">
+                <button class="btn btn-secondary" onclick="resetCalculator()"><span>🔄 Compare Another City</span></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-content">
+                <h3>🌟 Why Use Cost of Living Worldwide?</h3>
+                <p>Cost of Living Worldwide helps you find the average living costs in major cities across the globe. Perfect for students, remote workers, expats, digital nomads, and anyone planning to move internationally. Our data includes rent, groceries, utilities, transportation costs, and recommended salaries to help you make informed decisions about where to live.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">🌍</span>
+                        <div class="feature-title">50+ Global Cities</div>
+                        <div class="feature-text">Compare costs across major cities worldwide</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <div class="feature-title">Instant Results</div>
+                        <div class="feature-text">Get cost breakdowns in seconds</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">💯</span>
+                        <div class="feature-title">100% Free</div>
+                        <div class="feature-text">No signup or credit card required</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📱</span>
+                        <div class="feature-title">Mobile Friendly</div>
+                        <div class="feature-text">Works perfectly on any device</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Cost of Living Worldwide. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.875rem;">Made with ❤️ for global explorers</p>
+            <div class="social-links">
+                <a href="#" title="Share">🔗</a>
+                <a href="#" title="Bookmark">⭐</a>
+                <a href="#" title="Feedback">💬</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 60 + 20;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Show stats bar on load
+        setTimeout(() => {
+            document.getElementById('statsBar').classList.add('active');
+        }, 800);
+
+        const cityData = {
+            // United States
+            'new-york': {
+                name: 'New York, NY 🇺🇸',
+                rent: '$3,200',
+                groceries: '$450',
+                utilities: '$180',
+                gas: '$3.45',
+                salary: '$6,500'
+            },
+            'los-angeles': {
+                name: 'Los Angeles, CA 🇺🇸',
+                rent: '$2,800',
+                groceries: '$420',
+                utilities: '$165',
+                gas: '$4.20',
+                salary: '$5,800'
+            },
+            'chicago': {
+                name: 'Chicago, IL 🇺🇸',
+                rent: '$1,900',
+                groceries: '$380',
+                utilities: '$140',
+                gas: '$3.65',
+                salary: '$4,200'
+            },
+            'austin': {
+                name: 'Austin, TX 🇺🇸',
+                rent: '$1,650',
+                groceries: '$360',
+                utilities: '$155',
+                gas: '$3.15',
+                salary: '$3,800'
+            },
+            'miami': {
+                name: 'Miami, FL 🇺🇸',
+                rent: '$2,400',
+                groceries: '$400',
+                utilities: '$170',
+                gas: '$3.35',
+                salary: '$4,800'
+            },
+            'seattle': {
+                name: 'Seattle, WA 🇺🇸',
+                rent: '$2,300',
+                groceries: '$410',
+                utilities: '$150',
+                gas: '$4.10',
+                salary: '$5,200'
+            },
+            'boston': {
+                name: 'Boston, MA 🇺🇸',
+                rent: '$2,900',
+                groceries: '$430',
+                utilities: '$175',
+                gas: '$3.55',
+                salary: '$5,500'
+            },
+            'denver': {
+                name: 'Denver, CO 🇺🇸',
+                rent: '$1,850',
+                groceries: '$370',
+                utilities: '$145',
+                gas: '$3.40',
+                salary: '$4,400'
+            },
+            'atlanta': {
+                name: 'Atlanta, GA 🇺🇸',
+                rent: '$1,700',
+                groceries: '$350',
+                utilities: '$160',
+                gas: '$3.25',
+                salary: '$3,900'
+            },
+            'portland': {
+                name: 'Portland, OR 🇺🇸',
+                rent: '$1,750',
+                groceries: '$390',
+                utilities: '$135',
+                gas: '$3.85',
+                salary: '$4,100'
+            },
+            
+            // United Kingdom
+            'london': {
+                name: 'London 🇬🇧',
+                rent: '£2,100',
+                groceries: '£320',
+                utilities: '£180',
+                gas: '£1.50/L',
+                salary: '£4,200'
+            },
+            'manchester': {
+                name: 'Manchester 🇬🇧',
+                rent: '£1,100',
+                groceries: '£280',
+                utilities: '£150',
+                gas: '£1.48/L',
+                salary: '£2,600'
+            },
+            'edinburgh': {
+                name: 'Edinburgh 🇬🇧',
+                rent: '£1,200',
+                groceries: '£290',
+                utilities: '£155',
+                gas: '£1.49/L',
+                salary: '£2,800'
+            },
+            
+            // Canada
+            'toronto': {
+                name: 'Toronto 🇨🇦',
+                rent: 'C$2,300',
+                groceries: 'C$380',
+                utilities: 'C$150',
+                gas: 'C$1.65/L',
+                salary: 'C$5,000'
+            },
+            'vancouver': {
+                name: 'Vancouver 🇨🇦',
+                rent: 'C$2,500',
+                groceries: 'C$400',
+                utilities: 'C$130',
+                gas: 'C$1.85/L',
+                salary: 'C$5,200'
+            },
+            'montreal': {
+                name: 'Montreal 🇨🇦',
+                rent: 'C$1,400',
+                groceries: 'C$340',
+                utilities: 'C$140',
+                gas: 'C$1.70/L',
+                salary: 'C$3,600'
+            },
+            
+            // Australia
+            'sydney': {
+                name: 'Sydney 🇦🇺',
+                rent: 'A$2,800',
+                groceries: 'A$480',
+                utilities: 'A$220',
+                gas: 'A$1.90/L',
+                salary: 'A$6,200'
+            },
+            'melbourne': {
+                name: 'Melbourne 🇦🇺',
+                rent: 'A$2,200',
+                groceries: 'A$450',
+                utilities: 'A$200',
+                gas: 'A$1.85/L',
+                salary: 'A$5,400'
+            },
+            'brisbane': {
+                name: 'Brisbane 🇦🇺',
+                rent: 'A$1,900',
+                groceries: 'A$420',
+                utilities: 'A$190',
+                gas: 'A$1.80/L',
+                salary: 'A$4,800'
+            },
+            
+            // Germany
+            'berlin': {
+                name: 'Berlin 🇩🇪',
+                rent: '€1,300',
+                groceries: '€280',
+                utilities: '€220',
+                gas: '€1.75/L',
+                salary: '€3,400'
+            },
+            'munich': {
+                name: 'Munich 🇩🇪',
+                rent: '€1,800',
+                groceries: '€320',
+                utilities: '€240',
+                gas: '€1.80/L',
+                salary: '€4,200'
+            },
+            'frankfurt': {
+                name: 'Frankfurt 🇩🇪',
+                rent: '€1,500',
+                groceries: '€300',
+                utilities: '€230',
+                gas: '€1.78/L',
+                salary: '€3,800'
+            },
+            
+            // France
+            'paris': {
+                name: 'Paris 🇫🇷',
+                rent: '€1,600',
+                groceries: '€340',
+                utilities: '€180',
+                gas: '€1.85/L',
+                salary: '€3,800'
+            },
+            'lyon': {
+                name: 'Lyon 🇫🇷',
+                rent: '€1,000',
+                groceries: '€300',
+                utilities: '€160',
+                gas: '€1.82/L',
+                salary: '€2,800'
+            },
+            'marseille': {
+                name: 'Marseille 🇫🇷',
+                rent: '€900',
+                groceries: '€290',
+                utilities: '€155',
+                gas: '€1.80/L',
+                salary: '€2,600'
+            },
+            
+            // Spain
+            'madrid': {
+                name: 'Madrid 🇪🇸',
+                rent: '€1,200',
+                groceries: '€280',
+                utilities: '€140',
+                gas: '€1.55/L',
+                salary: '€2,800'
+            },
+            'barcelona': {
+                name: 'Barcelona 🇪🇸',
+                rent: '€1,300',
+                groceries: '€300',
+                utilities: '€150',
+                gas: '€1.58/L',
+                salary: '€3,000'
+            },
+            'valencia': {
+                name: 'Valencia 🇪🇸',
+                rent: '€850',
+                groceries: '€260',
+                utilities: '€130',
+                gas: '€1.52/L',
+                salary: '€2,200'
+            },
+            
+            // Italy
+            'rome': {
+                name: 'Rome 🇮🇹',
+                rent: '€1,100',
+                groceries: '€300',
+                utilities: '€160',
+                gas: '€1.80/L',
+                salary: '€2,600'
+            },
+            'milan': {
+                name: 'Milan 🇮🇹',
+                rent: '€1,400',
+                groceries: '€330',
+                utilities: '€170',
+                gas: '€1.85/L',
+                salary: '€3,200'
+            },
+            'florence': {
+                name: 'Florence 🇮🇹',
+                rent: '€950',
+                groceries: '€280',
+                utilities: '€150',
+                gas: '€1.78/L',
+                salary: '€2,400'
+            },
+            
+            // Netherlands
+            'amsterdam': {
+                name: 'Amsterdam 🇳🇱',
+                rent: '€1,800',
+                groceries: '€340',
+                utilities: '€180',
+                gas: '€1.95/L',
+                salary: '€4,000'
+            },
+            'rotterdam': {
+                name: 'Rotterdam 🇳🇱',
+                rent: '€1,300',
+                groceries: '€310',
+                utilities: '€165',
+                gas: '€1.92/L',
+                salary: '€3,200'
+            },
+            
+            // Switzerland
+            'zurich': {
+                name: 'Zurich 🇨🇭',
+                rent: 'CHF 2,200',
+                groceries: 'CHF 520',
+                utilities: 'CHF 180',
+                gas: 'CHF 1.75/L',
+                salary: 'CHF 7,500'
+            },
+            'geneva': {
+                name: 'Geneva 🇨🇭',
+                rent: 'CHF 2,100',
+                groceries: 'CHF 500',
+                utilities: 'CHF 175',
+                gas: 'CHF 1.72/L',
+                salary: 'CHF 7,200'
+            },
+            
+            // Singapore
+            'singapore': {
+                name: 'Singapore 🇸🇬',
+                rent: 'S$3,200',
+                groceries: 'S$450',
+                utilities: 'S$150',
+                gas: 'S$2.80/L',
+                salary: 'S$6,500'
+            },
+            
+            // Japan
+            'tokyo': {
+                name: 'Tokyo 🇯🇵',
+                rent: '¥150,000',
+                groceries: '¥45,000',
+                utilities: '¥18,000',
+                gas: '¥170/L',
+                salary: '¥420,000'
+            },
+            'osaka': {
+                name: 'Osaka 🇯🇵',
+                rent: '¥95,000',
+                groceries: '¥40,000',
+                utilities: '¥16,000',
+                gas: '¥165/L',
+                salary: '¥320,000'
+            },
+            'kyoto': {
+                name: 'Kyoto 🇯🇵',
+                rent: '¥85,000',
+                groceries: '¥38,000',
+                utilities: '¥15,000',
+                gas: '¥168/L',
+                salary: '¥300,000'
+            },
+            
+            // South Korea
+            'seoul': {
+                name: 'Seoul 🇰🇷',
+                rent: '₩1,200,000',
+                groceries: '₩420,000',
+                utilities: '₩180,000',
+                gas: '₩1,650/L',
+                salary: '₩3,500,000'
+            },
+            'busan': {
+                name: 'Busan 🇰🇷',
+                rent: '₩750,000',
+                groceries: '₩380,000',
+                utilities: '₩160,000',
+                gas: '₩1,620/L',
+                salary: '₩2,600,000'
+            },
+            
+            // UAE
+            'dubai': {
+                name: 'Dubai 🇦🇪',
+                rent: 'AED 6,500',
+                groceries: 'AED 1,400',
+                utilities: 'AED 650',
+                gas: 'AED 2.75/L',
+                salary: 'AED 15,000'
+            },
+            'abu-dhabi': {
+                name: 'Abu Dhabi 🇦🇪',
+                rent: 'AED 5,800',
+                groceries: 'AED 1,300',
+                utilities: 'AED 600',
+                gas: 'AED 2.70/L',
+                salary: 'AED 13,500'
+            },
+            
+            // India
+            'mumbai': {
+                name: 'Mumbai 🇮🇳',
+                rent: '₹45,000',
+                groceries: '₹12,000',
+                utilities: '₹4,500',
+                gas: '₹106/L',
+                salary: '₹95,000'
+            },
+            'bangalore': {
+                name: 'Bangalore 🇮🇳',
+                rent: '₹35,000',
+                groceries: '₹10,000',
+                utilities: '₹3,800',
+                gas: '₹102/L',
+                salary: '₹75,000'
+            },
+            'delhi': {
+                name: 'New Delhi 🇮🇳',
+                rent: '₹32,000',
+                groceries: '₹11,000',
+                utilities: '₹4,000',
+                gas: '₹96/L',
+                salary: '₹70,000'
+            },
+            
+            // Brazil
+            'sao-paulo': {
+                name: 'São Paulo 🇧🇷',
+                rent: 'R$2,800',
+                groceries: 'R$900',
+                utilities: 'R$380',
+                gas: 'R$5.50/L',
+                salary: 'R$6,500'
+            },
+            'rio': {
+                name: 'Rio de Janeiro 🇧🇷',
+                rent: 'R$2,500',
+                groceries: 'R$850',
+                utilities: 'R$360',
+                gas: 'R$5.70/L',
+                salary: 'R$6,000'
+            },
+            
+            // Mexico
+            'mexico-city': {
+                name: 'Mexico City 🇲🇽',
+                rent: 'MX$12,000',
+                groceries: 'MX$4,200',
+                utilities: 'MX$1,200',
+                gas: 'MX$22/L',
+                salary: 'MX$28,000'
+            },
+            'guadalajara': {
+                name: 'Guadalajara 🇲🇽',
+                rent: 'MX$9,000',
+                groceries: 'MX$3,800',
+                utilities: 'MX$1,000',
+                gas: 'MX$21/L',
+                salary: 'MX$22,000'
+            },
+            
+            // South Africa
+            'cape-town': {
+                name: 'Cape Town 🇿🇦',
+                rent: 'R12,000',
+                groceries: 'R4,500',
+                utilities: 'R1,800',
+                gas: 'R22/L',
+                salary: 'R32,000'
+            },
+            'johannesburg': {
+                name: 'Johannesburg 🇿🇦',
+                rent: 'R10,500',
+                groceries: 'R4,200',
+                utilities: 'R1,700',
+                gas: 'R21.50/L',
+                salary: 'R30,000'
+            }
+        };
+
+        function calculateCost() {
+            const select = document.getElementById('citySelect');
+            const selectedCity = select.value;
+            
+            if (!selectedCity) {
+                alert('Please select a city first!');
+                return;
+            }
+
+            const data = cityData[selectedCity];
+            const resultsSection = document.getElementById('resultsSection');
+            const comparisonTool = document.getElementById('comparisonTool');
+            
+            // Update main values
+            document.getElementById('cityName').textContent = data.name;
+            document.getElementById('rent').textContent = data.rent;
+            document.getElementById('groceries').textContent = data.groceries;
+            document.getElementById('utilities').textContent = data.utilities;
+            document.getElementById('gas').textContent = data.gas;
+            document.getElementById('salary').textContent = data.salary;
+            
+            // Calculate fun insights (approximate values based on groceries budget)
+            const groceryNum = parseInt(data.groceries.replace(/[^0-9]/g, ''));
+            document.getElementById('coffeeCount').textContent = Math.floor(groceryNum / 5) + ' cups/month';
+            document.getElementById('pizzaCount').textContent = Math.floor(groceryNum / 15) + ' times/month';
+            document.getElementById('movieCount').textContent = Math.floor(groceryNum / 12) + ' tickets/month';
+            document.getElementById('gymCount').textContent = Math.floor(groceryNum / 50) + ' months';
+            
+            // Show results with animation
+            resultsSection.classList.add('active');
+            setTimeout(() => {
+                comparisonTool.classList.add('active');
+            }, 300);
+            
+            // Smooth scroll to results
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
+        }
+
+        function resetCalculator() {
+            document.getElementById('citySelect').value = '';
+            document.getElementById('resultsSection').classList.remove('active');
+            document.getElementById('comparisonTool').classList.remove('active');
+            
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
+        }
+
+        function selectRandomCity() {
+            const select = document.getElementById('citySelect');
+            const options = Array.from(select.options).filter(opt => opt.value !== '');
+            const randomOption = options[Math.floor(Math.random() * options.length)];
+            
+            select.value = randomOption.value;
+            
+            // Add a little delay for dramatic effect
+            setTimeout(() => {
+                calculateCost();
+            }, 300);
+        }
+
+        // Auto-calculate when city is selected
+        document.getElementById('citySelect').addEventListener('change', function() {
+            if (this.value) {
+                calculateCost();
+            }
+        });
+
+        // Add click animation to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
